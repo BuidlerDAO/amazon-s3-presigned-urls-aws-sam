@@ -19,7 +19,12 @@ const getUploadURL = async function(contentType, prefix) {
   const timestamp = new Date().getTime();
   const randomID = `${timestamp}_${parseInt(Math.random() * 10000000)}`; // Adding timestamp to randomID
   const extension = contentType.split('/').pop(); // Extracting extension from contentType
-  const Key = `${prefix}/${randomID}.${extension}`; // Constructing objectKey using prefix, randomID, and extension
+  if (prefix !== "") {
+    const key = `${prefix}/${randomID}.${extension}`; // Constructing objectKey using prefix, randomID, and extension
+  } else {
+    const key = `${randomID}.${extension}`;
+  }
+  
 
   // Get signed URL from S3
   const s3Params = {
@@ -39,6 +44,6 @@ const getUploadURL = async function(contentType, prefix) {
 
   return JSON.stringify({
     uploadURL: uploadURL,
-    Key
+    key
   })
 }
